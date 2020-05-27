@@ -2,6 +2,8 @@ provider "aws" {
   region = "us-east-2"
 }
 
+# Data and Variables
+
 data "aws_vpc" "default" {
   default = true
 }
@@ -15,6 +17,8 @@ variable "server_port" {
   type        = number
   default     = 8080
 }
+
+# Auto Scaling Group and Launch Configuration
 
 resource "aws_autoscaling_group" "example" {
   launch_configuration = aws_launch_configuration.example.name
@@ -50,6 +54,8 @@ resource "aws_launch_configuration" "example" {
 #   value       = aws_instance.example.public_ip
 #   description = "The public IP address of the web server"
 # }
+
+# Security Groups
 
 resource "aws_security_group" "instance" {
   name = "terraform-example-instance"
