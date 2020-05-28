@@ -2,6 +2,8 @@ provider "aws" {
   region = "us-east-2"
 }
 
+# State locking mechanism
+
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "terraform-up-and-running-state-lcaparroz"
 
@@ -30,5 +32,18 @@ resource "aws_dynamodb_table" "terraform_locks" {
   attribute {
     name = "LockID"
     type = "S"
+  }
+}
+
+# Terraform backend configuration
+
+terraform {
+  backend "s3" {
+    bucket = "terraform-up-and-running-state-lcaparroz"
+    key    = "global/s3/terraform.tfstate"
+    region = "us-east-2"
+
+    dynamodb_table = "terraform-up-and-running-locks-lcaparroz"
+    encrypt        = true
   }
 }
